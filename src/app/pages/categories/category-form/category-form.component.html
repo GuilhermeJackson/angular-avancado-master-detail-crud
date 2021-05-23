@@ -19,13 +19,13 @@
             </h1>
         </div>
         <div class="col-md">
-            <a routerLink="new" class="btn btn-success float-right">
+            <a routerLink="/categories" class="btn btn-success float-right">
                 << Voltar
             </a>
         </div>
     </div>
 
-    <form>
+    <form [formGroup]="categoryForm">
         <div class="card">
             <div class="card-header">
                 Informações sobre a categoria
