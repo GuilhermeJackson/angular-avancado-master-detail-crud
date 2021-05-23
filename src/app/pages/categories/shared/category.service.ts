@@ -52,9 +52,9 @@ export class CategoryService {
       const url = `${this.apiPath}/${id}`;
       return this.http.delete(url).pipe(
         catchError(this.handleError),
-        map(null)
+        map(() => null)
       )
-    }
+    } 
 
     private jsonDataToCategories(jsonData: any[]): Category[] {
       const categories: Category[] = [];
