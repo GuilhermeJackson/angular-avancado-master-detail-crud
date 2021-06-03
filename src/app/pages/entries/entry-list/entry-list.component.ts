@@ -19,8 +19,6 @@ export class EntryListComponent implements OnInit {
       next: (entries) => this.entries = entries,
       error: () => alert('Erro ao caregar a lista')
     })
-    
-    console.log("asdsadas", this.entries);
   }
 
   deleteEntry(entry) {

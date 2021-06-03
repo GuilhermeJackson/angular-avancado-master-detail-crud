@@ -54,11 +54,9 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
       ).subscribe({
         next: (category) => {
           this.category = category;
-          console.log("loadCategory: ", this.category);
           this.categoryForm.patchValue(category);
         },
         error: () => {alert('Ocorreu um erro no servidor, tente novamente mais tade.')
-        console.log("loadCategory: ", this.category);
       }
         
       })
@@ -109,7 +107,6 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     category = {...category,
       id: uuidv4()
     }
-    console.log("Criando categoria", category);
     this.categoryService.create(category).subscribe({
       next:() => this.actionsForSuccess(category),
       error: (error) => this.actionForError(error) 
