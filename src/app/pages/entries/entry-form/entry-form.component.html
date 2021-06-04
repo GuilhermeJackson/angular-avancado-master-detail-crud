@@ -5,7 +5,7 @@
         <a routerLink="/">Home</a>
       </li>
       <li class="breadcrumb-item">
-        <a routerLink="/categories">Lançamento</a>
+        <a routerLink="/entries">Lançamento</a>
       </li>
       <li class="breadcrumb-item active">
         {{pageTitle}}
@@ -30,12 +30,11 @@
         Informações sobre o lançamento
       </div>
       <div class="card-body">
-
         <div class="form-row">
           <div class="form-group col-md-2">
             <label for="name">Tipo</label>
             <select name="type" id="type" formControlName="type" class="form-control">
-              <option *ngFor="let option of typeOption" [value]="option.value">Depositar</option>
+              <option *ngFor="let option of typeOptions" [value]="option.value">{{ option.text }}</option>
             </select>
             <div class="text-danger" *ngIf="entryForm.get('type').invalid && entryForm.get('type').touched">
               <div *ngIf="entryForm.get('type').errors.required">dado obrigatório</div>
@@ -57,24 +56,19 @@
               <div class="input-group-prepend">
                 <div class="input-group-text">R$</div>
               </div>
-              <input [imask]="imaskConfig" type="text" class="form-control text-right" id="amount" formControlName="amount">
+              <input [imask]="imaskConfig" type="text" class="form-control text-right" id="amount"
+                formControlName="amount">
             </div>
 
             <div class="text-danger" *ngIf="entryForm.get('amount').invalid && entryForm.get('amount').touched">
               <div *ngIf="entryForm.get('amount').errors.required">dado obrigatório</div>
             </div>
           </div>
-          
+
           <div class="form-group col-md-2">
             <label for="date">Data</label>
-            <p-calendar 
-            id="date" 
-            formControlName="date" 
-            inputStyleClass="form-control" 
-            dataType="string" 
-            dateFormat="dd/mm/yy"
-            [locale]="ptBR"
-            [showButtonBar]="true">
+            <p-calendar id="date" formControlName="date" inputStyleClass="form-control" dataType="string"
+              dateFormat="dd/mm/yy" [locale]="ptBR" [showButtonBar]="true">
             </p-calendar>
 
             <div class="text-danger" *ngIf="entryForm.get('date').invalid && entryForm.get('date').touched">
@@ -87,10 +81,12 @@
           <div class="form-group col-md-2">
             <label for="paid">Pago</label>
             <div class="btn-group">
-              <label (click)="entryForm.get('paid').setValue(true)" [class.active]="entryForm.get('paid').value == true" class="btn btn-outline-info">
+              <label (click)="entryForm.get('paid').setValue(true)" [class.active]="entryForm.get('paid').value == true"
+                class="btn btn-outline-info">
                 Pago
               </label>
-              <label (click)="entryForm.get('paid').setValue(false)" [class.active]="entryForm.get('paid').value == false" class="btn btn-outline-info">
+              <label (click)="entryForm.get('paid').setValue(false)"
+                [class.active]="entryForm.get('paid').value == false" class="btn btn-outline-info">
                 Pendente
               </label>
             </div>

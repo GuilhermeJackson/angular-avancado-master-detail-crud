@@ -68,7 +68,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       id: [null],
       name: [null, [Validators.required, Validators.minLength(2)]],
       description: [null],
-      type: [this.typeOption[0], [Validators.required]],
+      type: ["expense", [Validators.required]],
       amount: [null, [Validators.required]],
       date: [null, [Validators.required]],
       paid: [true, [Validators.required]],
@@ -141,7 +141,8 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   createEntry() {
     //creates a new entry and set form values ​​in the entry
     let entry: Entry = Object.assign(new Entry(), this.entryForm.value);
-    entry = {...entry,
+    entry = {
+      ...entry,
       id: uuidv4(),
       paidText: entry.paidText
     }
@@ -169,7 +170,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  get typeOption(): Array<any> {
+  get typeOptions(): Array<any> {
     return Object.entries(Entry.types).map(
       ([value, text]) => {
         return {
