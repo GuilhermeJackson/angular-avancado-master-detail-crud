@@ -86,9 +86,9 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
           this.entry = entry;
           this.entryForm.patchValue(entry);
         },
-        error: () => {alert('Ocorreu um erro no servidor, tente novamente mais tade.')
-      }
-        
+        error: () => {
+          alert('Ocorreu um erro no servidor, tente novamente mais tade.')
+        }
       })
     }
   }
@@ -140,16 +140,18 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   createEntry() {
     //creates a new entry and set form values ​​in the entry
+    debugger
     let entry: Entry = Object.assign(new Entry(), this.entryForm.value);
-    entry = {
-      ...entry,
-      id: uuidv4(),
-      paidText: entry.paidText
-    }
+    //entry = {
+    //  ...entry,
+    //  id: uuidv4()
+    //}
 
     this.entryService.create(entry).subscribe({
       next:() => this.actionsForSuccess(entry),
-      error: (error) => this.actionForError(error) 
+      error: (error) => {
+        this.actionForError(error) 
+      }
     })
   }
 

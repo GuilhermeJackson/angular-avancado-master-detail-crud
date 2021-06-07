@@ -1,8 +1,9 @@
+import { CategoryService } from './../../categories/shared/category.service';
 import { Observable, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Entry } from './entry.model';
-import { map, catchError, flatMap } from 'rxjs/operators';
+import { map, catchError, flatMap, mergeMap, switchMap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -12,7 +13,8 @@ export class EntryService {
   private apiPath: string = "api/entries";
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private categoryService: CategoryService
     ) { }
 
     getAll(): Observable<Entry[]> {
@@ -31,9 +33,14 @@ export class EntryService {
     }
    
     create(entry: Entry): Observable<Entry> {
-      return this.http.post(this.apiPath, entry).pipe(
-        catchError(this.handleError),
-        map(this.jsonDataToEntry)
+      return this.categoryService.getById(entry.categoryId).pipe(
+        switchMap(category => {
+          entry.category = category;
+          return this.http.post(this.apiPath, entry).pipe(
+            catchError(this.handleError),
+            map(this.jsonDataToEntry)
+          )
+        })
       )
     }
 
@@ -61,6 +68,7 @@ export class EntryService {
 
     private jsonDataToEntry(jsonData: any): Entry {
       return Object.assign(new Entry(), jsonData)
+      
     }
 
     handleError(error: any): Observable<any> {
