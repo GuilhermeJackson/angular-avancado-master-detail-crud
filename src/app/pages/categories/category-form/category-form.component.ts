@@ -1,7 +1,6 @@
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Category } from '../shared/category.model';
 import { CategoryService } from '../shared/category.service';
@@ -104,7 +103,6 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   createCategory() {
     //creates a new category and set form values ​​in the category
     let category: Category = Object.assign(new Category(), this.categoryForm.value);
-    
     this.categoryService.create(category).subscribe({
       next:() => this.actionsForSuccess(category),
       error: (error) => this.actionForError(error) 
