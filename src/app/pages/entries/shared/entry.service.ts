@@ -34,14 +34,14 @@ export class EntryService {
    
     create(entry: Entry): Observable<Entry> {
       return this.categoryService.getById(entry.categoryId).pipe(
-        switchMap(category => {
+        mergeMap(category => {
           entry.category = category;
           return this.http.post(this.apiPath, entry).pipe(
             catchError(this.handleError),
             map(this.jsonDataToEntry)
           )
         })
-      )
+      );
     }
 
     update(entry: Entry): Observable<Entry> {

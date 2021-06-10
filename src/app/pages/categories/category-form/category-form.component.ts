@@ -49,7 +49,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   loadCategory() {
     if(this.currentAction == "edit") {
       this.route.paramMap.pipe(
-        switchMap(params => this.categoryService.getById(params.get("id")))
+        switchMap(params => this.categoryService.getById(+params.get("id")))
         //
       ).subscribe({
         next: (category) => {
@@ -104,9 +104,7 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   createCategory() {
     //creates a new category and set form values ​​in the category
     let category: Category = Object.assign(new Category(), this.categoryForm.value);
-    category = {...category,
-      id: uuidv4()
-    }
+    
     this.categoryService.create(category).subscribe({
       next:() => this.actionsForSuccess(category),
       error: (error) => this.actionForError(error) 

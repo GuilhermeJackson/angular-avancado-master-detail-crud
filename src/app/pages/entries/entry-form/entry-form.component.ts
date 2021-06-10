@@ -32,7 +32,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     padFractionalZeros: true,
     normalizeZero: true,
     radix: ','
-  }
+  };
   ptBR = {
     firstDayOfWeek: 0,
     dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
@@ -52,7 +52,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     private route: ActivatedRoute,
     private router: Router,
     private formBuilder: FormBuilder,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
   ) { }
 
   setCurrentAction() {
@@ -140,17 +140,15 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   createEntry() {
     //creates a new entry and set form values ​​in the entry
-    debugger
+    
     let entry: Entry = Object.assign(new Entry(), this.entryForm.value);
-    //entry = {
-    //  ...entry,
-    //  id: uuidv4()
-    //}
+
 
     this.entryService.create(entry).subscribe({
       next:() => this.actionsForSuccess(entry),
       error: (error) => {
-        this.actionForError(error) 
+        this.actionForError(error)
+        console.log("DEU ERRO AO CRIAR", error)
       }
     })
   }
