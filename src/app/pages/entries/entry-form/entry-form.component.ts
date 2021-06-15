@@ -7,10 +7,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { Entry } from '../shared/entry.model';
 import { EntryService } from '../shared/entry.service';
 
-import { switchMap } from 'rxjs/operators';
+import { delay, switchMap } from 'rxjs/operators';
 
 import toastr from 'toastr';
 import { Category } from '../../categories/shared/category.model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-entry-form',
@@ -25,6 +26,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   submittingForm: boolean = false;
   entry: Entry = new Entry();
   categories: Array<Category>;
+
   imaskConfig = {
     mask: Number,
     scale: 2,
@@ -121,11 +123,13 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   }
 
   actionsForSuccess(entry: Entry) {
+    debugger
     toastr.success("Solicitação processada com sucesso");
     //skipLocationChange: browser does not return to the previous screen
     this.router.navigateByUrl("entries", {skipLocationChange: true}).then(
       () => this.router.navigate(["entries", entry.id, "edit"])
     )
+    console.log("entries", entry.id, "edit")
   }
 
   actionForError(error) {
@@ -140,15 +144,15 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   createEntry() {
     //creates a new entry and set form values ​​in the entry
-    
+    debugger
     let entry: Entry = Object.assign(new Entry(), this.entryForm.value);
-
-
     this.entryService.create(entry).subscribe({
-      next:() => this.actionsForSuccess(entry),
+      next: (entre) => {
+        this.actionsForSuccess(entre)
+      },
       error: (error) => {
         this.actionForError(error)
-        console.log("DEU ERRO AO CRIAR", error)
+        console.log(error)
       }
     })
   }
@@ -157,7 +161,10 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     const entry: Entry = Object.assign(new Entry(), this.entryForm.value);
     this.entryService.update(entry).subscribe({
       next:() => this.actionsForSuccess(entry),
-      error: (error) => this.actionForError(error) 
+      error: (error) => {
+        this.actionForError(error)
+        console.log(error)
+      } 
     })
   }
 

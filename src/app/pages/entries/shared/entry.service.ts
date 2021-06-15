@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Entry } from './entry.model';
-import { map, catchError, flatMap, mergeMap, switchMap } from 'rxjs/operators';
+import { map, catchError, mergeMap, switchMap } from 'rxjs/operators';
 
 
 @Injectable({
@@ -33,9 +33,11 @@ export class EntryService {
     }
    
     create(entry: Entry): Observable<Entry> {
+      debugger
       return this.categoryService.getById(entry.categoryId).pipe(
-        mergeMap(category => {
+        switchMap(category => {
           entry.category = category;
+          console.log("Serivice",entry);
           return this.http.post(this.apiPath, entry).pipe(
             catchError(this.handleError),
             map(this.jsonDataToEntry)
@@ -55,7 +57,6 @@ export class EntryService {
           )
         })
       )
-      
     }
 
     delete(id: number): Observable<any> {
@@ -81,5 +82,4 @@ export class EntryService {
       console.log('Erro na requisição: ', error)
       return throwError(error);
     }
-
 }
