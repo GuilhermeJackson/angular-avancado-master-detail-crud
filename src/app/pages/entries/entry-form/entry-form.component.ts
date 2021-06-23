@@ -2,16 +2,14 @@ import { CategoryService } from './../../categories/shared/category.service';
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Entry } from '../shared/entry.model';
 import { EntryService } from '../shared/entry.service';
 
-import { delay, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 
 import toastr from 'toastr';
 import { Category } from '../../categories/shared/category.model';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-entry-form',
@@ -81,7 +79,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   loadEntry() {
     if(this.currentAction == "edit") {
       this.route.paramMap.pipe(
-        switchMap(params => this.entryService.getById(params.get("id")))
+        switchMap(params => this.entryService.getById(+params.get("id")))
         //
       ).subscribe({
         next: (entry) => {
@@ -123,13 +121,11 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   }
 
   actionsForSuccess(entry: Entry) {
-    debugger
     toastr.success("Solicitação processada com sucesso");
     //skipLocationChange: browser does not return to the previous screen
     this.router.navigateByUrl("entries", {skipLocationChange: true}).then(
       () => this.router.navigate(["entries", entry.id, "edit"])
     )
-    console.log("entries", entry.id, "edit")
   }
 
   actionForError(error) {
@@ -152,7 +148,6 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
       },
       error: (error) => {
         this.actionForError(error)
-        console.log(error)
       }
     })
   }
