@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Entry } from './entry.model';
-import { mergeMap, switchMap } from 'rxjs/operators';
+import { catchError, mergeMap, switchMap } from 'rxjs/operators';
 import { BaseResourceService } from 'src/app/shared/services/base-resource.service';
 
 
@@ -20,37 +20,20 @@ export class EntryService extends BaseResourceService<Entry>{
      }
    
     create(entry: Entry): Observable<Entry> {
-      debugger
-      return this.categoryService.getById(entry.categoryId).pipe(
-        switchMap(category => {
-          entry.category = category;
-          return super.create(entry)
-        })
-      );
-      
+      return this.setCategoryAndSendToServer(entry, super.create.bind(this))
     }
 
     update(entry: Entry): Observable<Entry> {
+      return this.setCategoryAndSendToServer(entry, super.update.bind(this))
+    }
+
+    private setCategoryAndSendToServer(entry: Entry, sendFn: any): Observable<Entry> {
       return this.categoryService.getById(entry.categoryId).pipe(
-        mergeMap(category => {
+        mergeMap(category => { 
           entry.category = category;
-          return super.update(entry)
-        })
+          return sendFn(entry)
+        }),
+        catchError(this.handleError)
       )
-    }
-
-    protected jsonDataToResources(jsonData: any[]): Entry[] {
-      const categories: Entry[] = [];
-      jsonData.forEach(element => Entry.fromJson(element));
-      return categories;
-    }
-
-    protected jsonDataToResource(jsonData: any): Entry {
-      return Entry.fromJson(jsonData);
-    }
-
-    handleError(error: any): Observable<any> {
-      console.log('Erro na requisição: ', error)
-      return throwError(error);
     }
 }
