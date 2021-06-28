@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Entry } from './entry.model';
-import { map, catchError, mergeMap, switchMap } from 'rxjs/operators';
+import { mergeMap, switchMap } from 'rxjs/operators';
 import { BaseResourceService } from 'src/app/shared/services/base-resource.service';
 
 
@@ -14,12 +14,10 @@ export class EntryService extends BaseResourceService<Entry>{
   constructor(
     protected http: HttpClient,
     protected categoryService: CategoryService,
-    injector: Injector
+    protected injector: Injector,
     ) {
-      super("api/entries", injector)
+      super("api/entries", injector, Entry.fromJson)
      }
-
-
    
     create(entry: Entry): Observable<Entry> {
       debugger
@@ -43,13 +41,12 @@ export class EntryService extends BaseResourceService<Entry>{
 
     protected jsonDataToResources(jsonData: any[]): Entry[] {
       const categories: Entry[] = [];
-      jsonData.forEach(element => categories.push(Object.assign(new Entry(), element)));
+      jsonData.forEach(element => Entry.fromJson(element));
       return categories;
     }
 
     protected jsonDataToResource(jsonData: any): Entry {
-      return Object.assign(new Entry(), jsonData)
-      
+      return Entry.fromJson(jsonData);
     }
 
     handleError(error: any): Observable<any> {

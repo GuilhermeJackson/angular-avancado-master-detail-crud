@@ -140,8 +140,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   createEntry() {
     //creates a new entry and set form values ​​in the entry
-    debugger
-    let entry: Entry = Object.assign(new Entry(), this.entryForm.value);
+    let entry: Entry = Entry.fromJson(this.entryForm.value);
     this.entryService.create(entry).subscribe({
       next: (entre) => {
         this.actionsForSuccess(entre)
@@ -153,7 +152,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
   }
 
   updateEntry() {
-    const entry: Entry = Object.assign(new Entry(), this.entryForm.value);
+    let entry: Entry = Entry.fromJson(this.entryForm.value);
     this.entryService.update(entry).subscribe({
       next:() => this.actionsForSuccess(entry),
       error: (error) => {
